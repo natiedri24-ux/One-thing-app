@@ -1,4 +1,4 @@
-const CACHE_NAME = 'one-thing-v1';
+const CACHE_NAME = 'one-thing-v2';
 const ASSETS_TO_CACHE = [
   './index.html',
   './manifest.json',

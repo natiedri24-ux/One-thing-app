@@ -44,98 +44,32 @@
 
   body {
     font-family: 'Lexend', sans-serif;
-    background: #E8E2D6;
+    background: var(--cream);
     color: var(--text-primary);
     line-height: 1.6;
     font-size: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 16px 12px;
+    height: 100%;
+    overflow: hidden;
   }
 
-  /* Outer chrome — hidden in clean mode */
+  /* Outer chrome — hidden */
   .proto-header { display: none; }
 
-  /* Phone frame */
+  /* Phone frame — removed, app is full screen */
   .phone {
-    width: 390px;
-    max-width: 100%;
-    height: 844px;
-    max-height: 88vh;
+    position: fixed;
+    inset: 0;
     background: var(--cream);
-    border-radius: 52px;
-    border: 8px solid #1F1C18;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-    overflow: hidden;
-    position: relative;
     display: flex;
     flex-direction: column;
-  }
-  .dynamic-island {
-    position: absolute;
-    top: 14px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 30px;
-    background: #1F1C18;
-    border-radius: 18px;
-    z-index: 60;
+    overflow: hidden;
   }
 
-  /* Status bar */
-  .status-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 46px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 24px 0;
-    z-index: 55;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-primary);
-    pointer-events: none;
-  }
-  .status-bar .status-time { letter-spacing: 0.2px; }
-  .status-bar .status-icons {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    color: var(--text-primary);
-  }
-  .status-bar .status-icons svg { display: block; }
-
-  /* Home indicator */
-  .home-indicator-fade {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 34px;
-    background: linear-gradient(to top, var(--cream) 0%, rgba(244,239,230,0) 100%);
-    z-index: 59;
-    pointer-events: none;
-  }
-  .home-indicator {
-    position: absolute;
-    bottom: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 134px;
-    height: 5px;
-    border-radius: 999px;
-    background: var(--text-primary);
-    opacity: 0.25;
-    z-index: 60;
-    pointer-events: none;
-  }
+  /* Fake chrome hidden */
+  .dynamic-island { display: none; }
+  .status-bar { display: none; }
+  .home-indicator-fade { display: none; }
+  .home-indicator { display: none; }
 
   .screen-stack {
     position: relative;
@@ -148,7 +82,9 @@
     background: var(--screen-bg);
     display: none;
     flex-direction: column;
-    padding: 62px 24px 36px;
+    padding: env(safe-area-inset-top, 20px) 24px env(safe-area-inset-bottom, 20px);
+    padding-top: calc(env(safe-area-inset-top, 0px) + 24px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
     overflow-y: auto;
     animation: fadeIn 0.25s ease;
     transition: background 0.25s ease;
@@ -693,14 +629,14 @@
   .toggle.on .knob { left: 21px; }
 
   @media (max-width: 480px) {
-    .phone { height: 80vh; max-height: none; border-radius: 40px; border-width: 6px; }
+    .screen { padding-left: 20px; padding-right: 20px; }
   }
 </style>
 </head>
 <body>
 
 <div class="proto-header">
-  <h1>Anchor</h1>
+  <h1>One Thing</h1>
   <p>Click through the prototype. Use the buttons below the phone to jump to any screen.</p>
 </div>
 
@@ -941,8 +877,8 @@ screens.welcome = () => `
     ${shapeHTML('drift', 48)}
     ${shapeHTML('rescue', 48)}
   </div>
-  <h1 class="display" style="text-align:center;">Welcome to Anchor</h1>
-  <p class="body-secondary section-gap" style="text-align:center;">A calmer way to get things done. Pick a mode that fits how you feel, and Anchor meets you there.</p>
+  <h1 class="display" style="text-align:center;">Welcome to One Thing</h1>
+  <p class="body-secondary section-gap" style="text-align:center;">A calmer way to get things done. Pick a mode that fits how you feel, and the app meets you there.</p>
 
   <div class="screen-footer">
     <button class="btn btn-primary flow" onclick="go('name')">Get started</button>
@@ -1384,7 +1320,7 @@ screens.distraction = () => {
       <div class="time-label">remaining</div>
     </div>
     <p class="body-medium section-gap" style="text-align:center;">Draft project proposal</p>
-    <p class="body-secondary" style="text-align:center;">You opened Instagram. Anchor gently checked in:</p>
+    <p class="body-secondary" style="text-align:center;">You opened Instagram. One Thing gently checked in:</p>
     <div class="screen-footer">
       <button class="btn btn-primary flow" onclick="go('inprogress')">Back to session</button>
     </div>
@@ -1518,6 +1454,8 @@ function escapeHtml(str) {
 const IN_MODE_SCREENS = ['modescreen', 'inprogress', 'stillgoing', 'completion', 'distraction', 'eod'];
 
 function applyAccent() {
+  // sync body background so there's no flash on overscroll
+  document.body.style.background = 'var(--screen-bg)';
   const m = MODES[state.mode];
   document.documentElement.style.setProperty('--accent', m.accent);
   document.documentElement.style.setProperty('--accent-text', m.text);

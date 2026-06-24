@@ -44,25 +44,32 @@
 
   body {
     font-family: 'Lexend', sans-serif;
-    background: var(--cream);
+    background: #D6CFC4;
     color: var(--text-primary);
     line-height: 1.6;
     font-size: 16px;
     height: 100%;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Outer chrome — hidden */
   .proto-header { display: none; }
 
-  /* Phone frame — removed, app is full screen */
+  /* Centered mobile column — full screen on phone, contained on desktop */
   .phone {
-    position: fixed;
-    inset: 0;
+    position: relative;
+    width: 100%;
+    max-width: 430px;
+    height: 100vh;
+    height: 100dvh;
     background: var(--cream);
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 24px 64px rgba(0,0,0,0.2);
   }
 
   /* Fake chrome hidden */
@@ -82,9 +89,10 @@
     background: var(--screen-bg);
     display: none;
     flex-direction: column;
-    padding: env(safe-area-inset-top, 20px) 24px env(safe-area-inset-bottom, 20px);
     padding-top: calc(env(safe-area-inset-top, 0px) + 24px);
     padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
+    padding-left: 24px;
+    padding-right: 24px;
     overflow-y: auto;
     animation: fadeIn 0.25s ease;
     transition: background 0.25s ease;
@@ -95,6 +103,12 @@
     display: block;
     flex: none;
     height: 20px;
+  }
+
+  /* On real mobile: full bleed, no shadow */
+  @media (max-width: 480px) {
+    body { background: var(--screen-bg); display: block; }
+    .phone { max-width: 100%; box-shadow: none; }
   }
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }
@@ -628,9 +642,6 @@
   }
   .toggle.on .knob { left: 21px; }
 
-  @media (max-width: 480px) {
-    .screen { padding-left: 20px; padding-right: 20px; }
-  }
 </style>
 </head>
 <body>
@@ -872,16 +883,15 @@ const screens = {};
 
 // --- 0a. ONBOARDING: WELCOME ---
 screens.welcome = () => `
-  <div class="onboard-shapes">
-    ${shapeHTML('flow', 48)}
-    ${shapeHTML('drift', 48)}
-    ${shapeHTML('rescue', 48)}
-  </div>
-  <h1 class="display" style="text-align:center;">Welcome to One Thing</h1>
-  <p class="body-secondary section-gap" style="text-align:center;">A calmer way to get things done. Pick a mode that fits how you feel, and the app meets you there.</p>
-
-  <div class="screen-footer">
-    <button class="btn btn-primary flow" onclick="go('name')">Get started</button>
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:0;">
+    <div class="onboard-shapes" style="margin-bottom:32px;">
+      ${shapeHTML('flow', 48)}
+      ${shapeHTML('drift', 48)}
+      ${shapeHTML('rescue', 48)}
+    </div>
+    <h1 class="display">Welcome to One Thing</h1>
+    <p class="body-secondary" style="margin-bottom:48px;">A calmer way to get things done. Pick a mode that fits how you feel, and the app meets you there.</p>
+    <button class="btn btn-primary flow" style="width:100%;" onclick="go('name')">Get started</button>
   </div>
 `;
 

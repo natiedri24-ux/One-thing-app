@@ -40,6 +40,7 @@
 
   html, body {
     height: 100%;
+    overflow: hidden;
   }
 
   body {
@@ -48,23 +49,22 @@
     color: var(--text-primary);
     line-height: 1.6;
     font-size: 16px;
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   /* Outer chrome — hidden */
   .proto-header { display: none; }
+  .dynamic-island { display: none; }
+  .status-bar { display: none; }
+  .home-indicator-fade { display: none; }
+  .home-indicator { display: none; }
 
-  /* Centered mobile column — full screen on phone, contained on desktop */
+  /* ---- DESKTOP: centered phone column ---- */
   .phone {
-    position: relative;
-    width: 100%;
-    max-width: 430px;
-    height: 100vh;
-    height: 100dvh;
+    position: fixed;
+    top: 0; bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 430px;
     background: var(--cream);
     display: flex;
     flex-direction: column;
@@ -72,11 +72,17 @@
     box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 24px 64px rgba(0,0,0,0.2);
   }
 
-  /* Fake chrome hidden */
-  .dynamic-island { display: none; }
-  .status-bar { display: none; }
-  .home-indicator-fade { display: none; }
-  .home-indicator { display: none; }
+  /* ---- MOBILE: true full-screen ---- */
+  @media (hover: none) and (pointer: coarse) {
+    html, body { height: 100%; }
+    body { background: var(--screen-bg); }
+    .phone {
+      left: 0; right: 0;
+      transform: none;
+      width: 100%;
+      box-shadow: none;
+    }
+  }
 
   .screen-stack {
     position: relative;
@@ -103,12 +109,6 @@
     display: block;
     flex: none;
     height: 20px;
-  }
-
-  /* Touch devices (any phone or tablet): full bleed, no frame */
-  @media (hover: none) and (pointer: coarse) {
-    body { background: var(--screen-bg); display: block; }
-    .phone { max-width: 100%; box-shadow: none; border-radius: 0; }
   }
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }

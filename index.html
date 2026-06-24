@@ -1173,7 +1173,8 @@ screens.inprogress = () => {
     <p class="body-medium section-gap" style="text-align:center;">${taskName}</p>
 
     <button class="btn btn-primary ${state.mode}" onclick="completeCurrentTask()" style="margin-bottom:8px;">I'm done with this</button>
-    <button class="btn btn-secondary" onclick="togglePause()">${state.isPaused ? 'Resume' : 'Pause'}</button>
+    <button class="btn btn-secondary" onclick="togglePause()" style="margin-bottom:${state.isPaused ? '8px' : '0'}">${state.isPaused ? 'Resume' : 'Pause'}</button>
+    ${state.isPaused ? `<button class="btn btn-text" onclick="switchTask()" style="color:var(--text-secondary);">Switch task</button>` : ''}
 
     <div class="screen-footer">
       <span class="caption">Finished or moving on, either is fine</span>
@@ -1675,6 +1676,17 @@ function togglePause() {
     }
   }
   render();
+}
+
+function switchTask() {
+  // Abandon current task without marking it done, clear the timer, go back to mode screen
+  clearTimer();
+  state.isPaused = false;
+  state.timerSeconds = 0;
+  state.elapsedSeconds = 0;
+  state.timerMode = 'countdown';
+  state.overtimeCount = 0;
+  go('modescreen');
 }
 
 function adjustTimer(minutesDelta) {

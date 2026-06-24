@@ -105,10 +105,10 @@
     height: 20px;
   }
 
-  /* On real mobile: full bleed, no shadow */
-  @media (max-width: 480px) {
+  /* Touch devices (any phone or tablet): full bleed, no frame */
+  @media (hover: none) and (pointer: coarse) {
     body { background: var(--screen-bg); display: block; }
-    .phone { max-width: 100%; box-shadow: none; }
+    .phone { max-width: 100%; box-shadow: none; border-radius: 0; }
   }
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }
